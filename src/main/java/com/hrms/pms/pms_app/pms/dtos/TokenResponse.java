@@ -1,0 +1,13 @@
+package com.hrms.pms.pms_app.pms.dtos;
+
+public record TokenResponse(
+        String accessToken,
+        String refreshToken,
+//        long expiresIn,
+//        String tokenType,
+        UserDto user
+) {
+    public static TokenResponse of(String accessToken, String refreshToken, UserDto user){
+        return new TokenResponse (accessToken, refreshToken, user);
+    }
+}
