@@ -1,11 +1,13 @@
 package com.hrms.pms.pms_app.pms.repositories;
 
 import com.hrms.pms.pms_app.pms.dtos.PayStructureResponseDto;
+import com.hrms.pms.pms_app.pms.entities.EmployeeCtc;
 import com.hrms.pms.pms_app.pms.entities.PayStructure;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface PayStructureRepository extends JpaRepository<PayStructure, UUID> {
@@ -19,4 +21,5 @@ public interface PayStructureRepository extends JpaRepository<PayStructure, UUID
     boolean existsByEmploymentTypeId(UUID employmentTypeId);
 
     List<PayStructure> findByEmploymentTypeIdAndIsActiveTrueOrderById(UUID employmentTypeId);
+
 }

@@ -14,4 +14,5 @@ public interface SalaryComponentRepository extends JpaRepository<SalaryComponent
     boolean existsByNameIgnoreCase(String name);
 
     boolean existsByNameIgnoreCaseAndIdNot(String name, UUID id);
+    SalaryComponent findByNameIgnoreCaseAndIsActiveTrue(String name);
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface TaxSlabRepository extends JpaRepository<TaxSlab, UUID> {
@@ -17,4 +18,12 @@ public interface TaxSlabRepository extends JpaRepository<TaxSlab, UUID> {
             Double maxIncome,
             Double minIncome
     );
+
+    List<TaxSlab> findByFinancialYearAndIsActiveTrueOrderByMinIncomeAsc(String financialYear);
+    @Query("""
+        SELECT t FROM TaxSlab t
+        WHERE t.isActive = true
+        AND :income BETWEEN t.minIncome AND t.maxIncome
+    """)
+    Optional<TaxSlab> findApplicableSlab(@Param("income") Double income);
 }

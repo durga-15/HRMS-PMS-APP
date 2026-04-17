@@ -44,7 +44,9 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/login").permitAll()
                                 .requestMatchers("/api/auth/refresh").permitAll()
                                 .requestMatchers("/api/auth/logout").permitAll()
+                                .requestMatchers("/api/salary/pdf").permitAll()
                                 .requestMatchers("/api/users").hasAnyRole(AppConstants.ADMIN_ROLE, AppConstants.EMP_ROLE)
+                                .requestMatchers("/api/users").permitAll()
 //                                .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -85,6 +87,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowedOrigins(List.of(
+                "http://my-frontend-s3-bucket-1.s3-website.ap-south-1.amazonaws.com"
+        ));
 
         config.setAllowedOriginPatterns(List.of("*")); // or your IP
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

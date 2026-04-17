@@ -15,7 +15,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/emp-pay-structure")
 @RequiredArgsConstructor
-public class EmpPayStructureController {
+public class    EmpPayStructureController {
 
     private final EmpPayStructureService service;
 

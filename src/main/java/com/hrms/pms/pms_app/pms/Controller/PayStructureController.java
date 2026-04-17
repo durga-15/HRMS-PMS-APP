@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,6 +26,7 @@ public class PayStructureController {
     private final PayStructureService service;
 
     // ================= CREATE =================
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse<PayStructureResponseDto>> create(
             @Valid @RequestBody PayStructureRequestDto dto) {
@@ -37,6 +39,7 @@ public class PayStructureController {
     }
 
     // ================= UPDATE =================
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<PayStructureResponseDto> update(
             @PathVariable UUID id,
@@ -48,6 +51,7 @@ public class PayStructureController {
     }
 
     // ================= GET BY ID =================
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<PayStructureResponseDto> getById(
             @PathVariable UUID id) {
@@ -58,6 +62,7 @@ public class PayStructureController {
     }
 
     // ================= GET BY EMPLOYMENT TYPE =================
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/employment/{employmentTypeId}")
     public ResponseEntity<List<PayStructureResponseDto>> getByEmploymentType(
             @PathVariable UUID employmentTypeId) {
