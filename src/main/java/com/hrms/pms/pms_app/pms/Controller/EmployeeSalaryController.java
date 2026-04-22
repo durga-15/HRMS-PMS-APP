@@ -1,13 +1,11 @@
 package com.hrms.pms.pms_app.pms.Controller;
 
+import com.hrms.pms.pms_app.pms.dtos.EmployeeSalaryRequestDto;
 import com.hrms.pms.pms_app.pms.dtos.EmployeeSalaryResponseDto;
 import com.hrms.pms.pms_app.pms.services.EmployeeSalaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -18,15 +16,28 @@ public class EmployeeSalaryController {
 
     private final EmployeeSalaryService service;
 
-    @GetMapping
+    @PostMapping("/get")
     public ResponseEntity<EmployeeSalaryResponseDto> getSalary(
-            @RequestParam UUID empId,
-            @RequestParam Long month,
-            @RequestParam Long year) {
+            @RequestBody EmployeeSalaryRequestDto request) {
 
         EmployeeSalaryResponseDto response =
-                service.getSalary(empId, month, year);
+                service.getSalary(
+                        request.getEmpId(),
+                        request.getMonth(),
+                        request.getYear()
+                );
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping
+    public ResponseEntity<EmployeeSalaryResponseDto> getSalaryOfEmployee(
+            @RequestParam UUID empId,
+            @RequestParam Long month,
+            @RequestParam Long year) {
+        EmployeeSalaryResponseDto response = service.getSalary(
+                empId,
+                month,
+                year);
+        return ResponseEntity.ok(response); }
 }

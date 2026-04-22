@@ -19,6 +19,7 @@ public class RevisionType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "revision_id", nullable = false, unique = true)
     private UUID id;
 
     @Column(name = "revision_name", nullable = false, unique = true)

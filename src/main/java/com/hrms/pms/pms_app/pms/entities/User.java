@@ -32,6 +32,10 @@ public class User implements UserDetails {
     @Column(name = "status", length = 30)
     private boolean status = true;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "emp_id", referencedColumnName = "emp_id")
+    private Employee employee;
+
     private Instant createdAt = Instant.now();
     private Instant updatedAt = Instant.now();
 

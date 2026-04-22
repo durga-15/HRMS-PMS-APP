@@ -51,7 +51,7 @@ public class PayStructureController {
     }
 
     // ================= GET BY ID =================
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<PayStructureResponseDto> getById(
             @PathVariable UUID id) {
@@ -74,6 +74,7 @@ public class PayStructureController {
     }
 
     // ================= DEACTIVATE =================
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deactivate(@PathVariable UUID id) {
 

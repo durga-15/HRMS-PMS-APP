@@ -47,6 +47,12 @@ public class SecurityConfig {
                                 .requestMatchers("/api/salary/pdf").permitAll()
                                 .requestMatchers("/api/users").hasAnyRole(AppConstants.ADMIN_ROLE, AppConstants.EMP_ROLE)
                                 .requestMatchers("/api/users").permitAll()
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/swagger-ui/index.html"
+                                ).permitAll()
 //                                .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -89,7 +95,8 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "http://my-frontend-s3-bucket-1.s3-website.ap-south-1.amazonaws.com"
+                "http://my-frontend-s3-bucket-1.s3-website.ap-south-1.amazonaws.com",
+                "https://dd6gzv507q8ms.cloudfront.net"
         ));
 
         config.setAllowedOriginPatterns(List.of("*")); // or your IP

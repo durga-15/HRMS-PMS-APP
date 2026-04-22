@@ -19,7 +19,7 @@ public class SalaryComponent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "comp_id", nullable = false, unique = true)
+    @Column(name = "comp_id", nullable = true, unique = false)
     private UUID id;
 
     @Column(name = "comp_name", nullable = false, unique = true)

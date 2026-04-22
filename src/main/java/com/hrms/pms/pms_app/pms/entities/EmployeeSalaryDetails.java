@@ -23,8 +23,12 @@ public class EmployeeSalaryDetails {
     @JoinColumn(name = "emp_sal_id")
     private EmployeeSalary employeeSalary;
 
-    @Column(name = "comp_id", nullable = false)
+    @Column(name = "comp_id", nullable = true)
     private UUID compId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "revision_id")
+    private RevisionType revisionType;
 
     private BigDecimal amount;
 

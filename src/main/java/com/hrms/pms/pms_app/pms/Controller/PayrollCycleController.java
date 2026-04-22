@@ -5,6 +5,7 @@ import com.hrms.pms.pms_app.pms.dtos.PayrollCycleResponseDto;
 import com.hrms.pms.pms_app.pms.services.PayrollCycleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class PayrollCycleController {
 
     private final PayrollCycleService service;
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<PayrollCycleResponseDto> create(
             @RequestBody PayrollCycleRequestDto dto) {
@@ -33,6 +34,7 @@ public class PayrollCycleController {
         return ResponseEntity.ok(service.getAll());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<PayrollCycleResponseDto> update(
             @PathVariable UUID id,
@@ -40,6 +42,7 @@ public class PayrollCycleController {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         service.delete(id);

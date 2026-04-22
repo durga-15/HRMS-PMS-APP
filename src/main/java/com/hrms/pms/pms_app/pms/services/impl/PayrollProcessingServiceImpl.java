@@ -2,6 +2,7 @@ package com.hrms.pms.pms_app.pms.services.impl;
 
 import com.hrms.pms.pms_app.pms.dtos.ApiResponse;
 import com.hrms.pms.pms_app.pms.dtos.ComponentType;
+import com.hrms.pms.pms_app.pms.dtos.RevisionCategory;
 import com.hrms.pms.pms_app.pms.entities.*;
 import com.hrms.pms.pms_app.pms.repositories.*;
 import com.hrms.pms.pms_app.pms.services.PayrollProcessingService;
@@ -171,6 +172,34 @@ public class PayrollProcessingServiceImpl implements PayrollProcessingService {
                         .status("ACTIVE")
                         .build());
             }
+
+            // ✅ 3.5 Apply Employee Revisions (BONUS / REIMBURSEMENT etc.)
+//            List<EmployeeRevision> revisions =
+//                    employeeRevisionRepository
+//                                .findByEmployee_EmpIdAndPayRollDetails_IdAndStatus(
+//                                    emp.getEmpId(),
+//                                    payroll.getId(),
+//                                    "APPROVED"
+//                            );
+//
+//            for (EmployeeRevision r : revisions) {
+//
+//                BigDecimal amount = scale(r.getAmount());
+//
+//                // ✔ Add to gross or deduction
+//                if (r.getRevisionType().getCategory() == RevisionCategory.EARNING) {
+//                    gross = scale(gross.add(amount));
+//                } else {
+//                    deductions = scale(deductions.add(amount));
+//                }
+//
+//                // ✔ Add into salary details (IMPORTANT)
+//                detailsList.add(EmployeeSalaryDetails.builder()
+//                        .revisionType(r.getRevisionType())
+//                        .compId(null)
+//                        .status("ACTIVE")
+//                        .build());
+//            }
 
             // 4. Net Salary
 //            BigDecimal net = scale(gross.subtract(deductions));

@@ -58,4 +58,20 @@ public class EmployeeSalaryServiceImpl implements EmployeeSalaryService {
 
         return response;
     }
+
+    @Override
+    public EmployeeSalaryResponseDto getSalaryOfEmployee(UUID empId, Long month, Long year) {
+        List<EmployeeSalaryProjection> data = repository.getEmployeeSalaryWithComponents(empId, month, year);
+        if (data.isEmpty()) {
+            throw new RuntimeException("No salary found for given inputs");
+        } EmployeeSalaryProjection first = data.get(0);
+        EmployeeSalaryResponseDto response = new EmployeeSalaryResponseDto();
+        response.setEmpId(first.getEmpId()); response.setGrossSalary(first.getGrossSalary());
+        response.setTotalDeductions(first.getTotalDeductions());
+        response.setNetSalary(first.getNetSalary());
+        List<ComponentDto> components = data.stream() .map(row -> {
+            ComponentDto dto = new ComponentDto(); dto.setCompId(row.getCompId());
+            dto.setCompName(row.getCompName()); dto.setCompType(row.getCompType());
+            dto.setAmount(row.getAmount()); return dto; }) .toList();
+        response.setComponents(components); return response; }
 }

@@ -34,7 +34,7 @@ public class SalaryComponentController {
 
 
     //Get all salary components
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<SalaryComponentDto>> getAllSalaryComponents() {
         List<SalaryComponentDto> components = service.getAllSalaryComponents();
@@ -49,6 +49,7 @@ public class SalaryComponentController {
     }
 
     //Update salary component
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<SalaryComponentResponseDto> updateSalaryComponent(
             @PathVariable("id") String id,
@@ -59,6 +60,7 @@ public class SalaryComponentController {
     }
 
       // Delete salary component
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<SalaryComponentResponseDto> deleteSalaryComponent(
             @PathVariable String id) {

@@ -13,4 +13,6 @@ public interface RevisionTypeRepository extends JpaRepository<RevisionType, UUID
     boolean existsByRevisionNameIgnoreCaseAndIdNot(String revisionName, UUID id);
 
     Optional<RevisionType> findByRevisionNameIgnoreCase(String revisionName);
+
+    Optional<RevisionType> findByIdAndIsActiveTrue(UUID id);
 }

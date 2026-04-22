@@ -18,5 +18,7 @@ public class EmployeeSalaryResponseDto {
 
     private List<ComponentDto> components;
 
+    private List<RevisionDto> revisions;
+
     // getters & setters
 }

@@ -2,6 +2,9 @@ package com.hrms.pms.pms_app.pms.services.impl;
 
 import com.hrms.pms.pms_app.pms.dtos.ComponentDto;
 import com.hrms.pms.pms_app.pms.dtos.EmployeeSalaryResponseDto;
+import com.hrms.pms.pms_app.pms.dtos.RevisionDto;
+import com.hrms.pms.pms_app.pms.repositories.EmployeeRevisionRepository;
+import com.hrms.pms.pms_app.pms.services.EmployeeRevisionProjection;
 import com.hrms.pms.pms_app.pms.services.EmployeeSalaryService;
 import com.hrms.pms.pms_app.pms.services.SalaryPdfService;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -15,78 +18,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.Month;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-//@Service
-//@RequiredArgsConstructor
-//public class SalaryPdfServiceImpl implements SalaryPdfService {
-//
-//    private final EmployeeSalaryService salaryService;
-//
-//    @Override
-//    public byte[] generateSalaryPdf(UUID empId, Long month, Long year) {
-//
-//        EmployeeSalaryResponseDto salary =
-//                salaryService.getSalary(empId, month, year);
-//
-//        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-//
-//            PdfWriter writer = new PdfWriter(out);
-//            PdfDocument pdfDoc = new PdfDocument(writer);
-//            Document document = new Document(pdfDoc);
-//
-//            // Title
-//            document.add(new Paragraph("Employee Salary Slip")
-//                    .setBold()
-//                    .setFontSize(16));
-//
-//            // Basic Info
-//            document.add(new Paragraph("Employee ID: " + salary.getEmpId()));
-//            document.add(new Paragraph("Month: " + month + " Year: " + year));
-//
-//            document.add(new Paragraph("\n"));
-//
-//            // Salary Summary
-//            document.add(new Paragraph("Gross Salary: " + salary.getGrossSalary()));
-//            document.add(new Paragraph("Total Deductions: " + salary.getTotalDeductions()));
-//            document.add(new Paragraph("Net Salary: " + salary.getNetSalary()));
-//
-//            document.add(new Paragraph("\n"));
-//
-//            // Components Table
-//            Table table = new Table(3);
-//            table.addHeaderCell("Component");
-//            table.addHeaderCell("Type");
-//            table.addHeaderCell("Amount");
-////            table.addHeaderCell("Component ID");
-//
-//            for (ComponentDto comp : salary.getComponents()) {
-//                table.addCell(comp.getCompName());
-//                table.addCell(String.valueOf(comp.getCompType()));
-//                table.addCell(String.valueOf(comp.getAmount()));
-////                table.addCell(String.valueOf(comp.getCompId()));
-//            }
-//
-//            document.add(table);
-//
-//            document.close();
-//
-//            return out.toByteArray();
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error while generating PDF", e);
-//        }
-//    }
-//}
-
 @Service
 @RequiredArgsConstructor
 public class SalaryPdfServiceImpl implements SalaryPdfService {
 
     private final EmployeeSalaryService salaryService;
+    private final EmployeeRevisionRepository employeeRevisionRepository;
 
     @Override
     public byte[] generateSalaryPdf(UUID empId, Long month, Long year) {
@@ -191,6 +135,79 @@ public class SalaryPdfServiceImpl implements SalaryPdfService {
                     .add(new Paragraph("₹ " + salary.getNetSalary()).setBold()));
 
             document.add(summary);
+
+            document.add(new Paragraph("\n"));
+
+
+
+//            return out.toByteArray();
+
+            // ================= FETCH REVISIONS DIRECTLY =================
+            List<EmployeeRevisionProjection> revisionData =
+                    employeeRevisionRepository.findRevisions(empId, month, year);
+
+            List<RevisionDto> revisions = revisionData.stream()
+                    .map(r -> RevisionDto.builder()
+                            .revisionName(r.getRevisionName())
+                            .category(r.getCategory())
+                            .amount(r.getAmount())
+                            .build())
+                    .toList();
+
+            // ================= REVISIONS CALCULATION =================
+            BigDecimal grossFromRevision = BigDecimal.ZERO;
+            BigDecimal deductionFromRevision = BigDecimal.ZERO;
+
+//            List<RevisionDto> revisions = salary.getRevisions();
+
+            for (RevisionDto rev : revisions) {
+                if ("EARNING".equalsIgnoreCase(rev.getCategory())) {
+                    grossFromRevision = grossFromRevision.add(rev.getAmount());
+                } else {
+                    deductionFromRevision = deductionFromRevision.add(rev.getAmount());
+                }
+            }
+
+            BigDecimal netFromRevision = grossFromRevision.subtract(deductionFromRevision);
+
+            // ================= REVISIONS TABLE =================
+            document.add(new Paragraph("Revisions").setBold());
+
+            Table revTable = new Table(3).useAllAvailableWidth();
+
+            revTable.addHeaderCell("Revision Name");
+            revTable.addHeaderCell("Category");
+            revTable.addHeaderCell("Amount");
+
+            for (RevisionDto rev : revisions) {
+                revTable.addCell(rev.getRevisionName());
+                revTable.addCell(rev.getCategory());
+                revTable.addCell("₹ " + rev.getAmount());
+            }
+
+            document.add(revTable);
+
+            document.add(new Paragraph("\n"));
+
+            // ================= REVISION SUMMARY =================
+            document.add(new Paragraph("Revision Summary").setBold());
+
+            Table revSummary = new Table(2).useAllAvailableWidth();
+
+            BigDecimal finalGross = salary.getGrossSalary().add(grossFromRevision);
+            BigDecimal finalDeductions = salary.getTotalDeductions().add(deductionFromRevision);
+            BigDecimal finalNet = finalGross.subtract(finalDeductions);
+
+            revSummary.addCell("Gross from Revisions");
+            revSummary.addCell("₹ " + finalGross);
+
+            revSummary.addCell("Total Deductions from Revisions");
+            revSummary.addCell("₹ " + finalDeductions);
+
+            revSummary.addCell(new Cell().add(new Paragraph("Net from Revisions").setBold()));
+            revSummary.addCell(new Cell().add(new Paragraph("₹ " + finalNet).setBold()));
+
+            document.add(revSummary);
 
             document.add(new Paragraph("\n"));
 

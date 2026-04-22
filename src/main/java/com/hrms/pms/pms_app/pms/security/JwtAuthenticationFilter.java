@@ -136,7 +136,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
-                                    userUuid.toString(),
+//                                    userUuid.toString(),
+//                                    user.getEmployee(),
+//                                    user,
+                                    user.getEmployee().getEmpId(),
                                     null,
                                     authorities
                             );
@@ -144,6 +147,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+//                    UUID empId = user.getEmployee().getEmpId();
                 });
 
             } catch (ExpiredJwtException e) {

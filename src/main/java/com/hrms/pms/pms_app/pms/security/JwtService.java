@@ -55,6 +55,7 @@ public class JwtService {
                 .expiration(Date.from(now.plusSeconds(accessTtlSeconds)))
                 .claims(Map.of(
                         "email", user.getEmail(),
+                        "emp_id", user.getEmployee().getEmpId(),
                         "roles", roles,
                         "typ", "access"
                 ))

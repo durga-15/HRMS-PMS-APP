@@ -10,4 +10,5 @@ public interface EmpRepository extends JpaRepository<Employee, UUID> {
 
     List<Employee> findByIsActiveTrue();
 
+
 }

@@ -105,7 +105,7 @@ public class PayStructureServiceImpl implements PayStructureService {
     public PayStructureResponseDto getById(UUID id) {
 
         PayStructure entity = payStructureRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pay Structure not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Pay Structure not found"));
 
         return mapToDto(entity);
     }

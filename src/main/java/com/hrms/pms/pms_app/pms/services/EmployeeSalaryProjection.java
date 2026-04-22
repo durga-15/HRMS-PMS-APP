@@ -19,4 +19,9 @@ public interface EmployeeSalaryProjection {
     String getCompName();
     String getCompType();
     BigDecimal getAmount();
+
+    // NEW FIELDS
+    String getRevisionName();
+    String getRevisionCategory();
+    BigDecimal getRevisionAmount();
 }
