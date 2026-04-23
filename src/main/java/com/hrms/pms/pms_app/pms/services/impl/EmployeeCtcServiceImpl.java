@@ -7,9 +7,12 @@ import com.hrms.pms.pms_app.pms.repositories.EmpRepository;
 import com.hrms.pms.pms_app.pms.repositories.EmployeeCtcRepository;
 import com.hrms.pms.pms_app.pms.services.EmployeeCtcService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -69,6 +72,14 @@ public class EmployeeCtcServiceImpl implements EmployeeCtcService {
     }
 
     @Override
+    public List<EmployeeCtcResponseDto> getAll() {
+        return repository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    @Override
     public void deactivate(UUID id) {
 
         EmployeeCtc entity = repository.findById(id)
@@ -81,8 +92,13 @@ public class EmployeeCtcServiceImpl implements EmployeeCtcService {
 
     // ✅ Mapper
     private EmployeeCtcResponseDto mapToResponse(EmployeeCtc entity) {
+
+        Employee emp = entity.getEmployee();
+
+        String fullName = emp.getFirstName() + " " + emp.getLastName();
         return EmployeeCtcResponseDto.builder()
                 .empCtcId(entity.getEmpCtcId())
+                .employeeName(fullName)
                 .empId(entity.getEmployee().getEmpId())
                 .ctc(entity.getCtc())
                 .isActive(entity.getIsActive())

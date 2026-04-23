@@ -64,8 +64,6 @@ public class RevisionTypeServiceImpl implements RevisionTypeService {
         RevisionType entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Revision type not found"));
 
-        entity.setIsActive(false);
-
-        repository.save(entity);
+        repository.delete(entity);
     }
 }

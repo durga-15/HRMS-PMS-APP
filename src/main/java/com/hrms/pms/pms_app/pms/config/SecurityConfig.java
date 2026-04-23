@@ -45,7 +45,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/refresh").permitAll()
                                 .requestMatchers("/api/auth/logout").permitAll()
                                 .requestMatchers("/api/salary/pdf").permitAll()
-                                .requestMatchers("/api/users").hasAnyRole(AppConstants.ADMIN_ROLE, AppConstants.EMP_ROLE)
+                                .requestMatchers("/health").permitAll()
                                 .requestMatchers("/api/users").permitAll()
                                 .requestMatchers("/api/employees").permitAll()
                                 .requestMatchers(

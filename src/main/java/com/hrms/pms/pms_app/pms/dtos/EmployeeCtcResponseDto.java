@@ -13,6 +13,7 @@ public class EmployeeCtcResponseDto {
 
     private UUID empCtcId;
     private UUID empId;
+    private String employeeName;
     private BigDecimal ctc;
     private Boolean isActive;
 }

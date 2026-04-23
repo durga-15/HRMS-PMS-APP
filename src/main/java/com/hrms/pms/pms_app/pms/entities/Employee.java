@@ -37,6 +37,10 @@ public class Employee {
     private String address;
 
     @ManyToOne
+    @JoinColumn(name = "emp_type_id")
+    private EmploymentType employeeType;
+
+    @ManyToOne
     @JoinColumn(name = "dept_id")
     private Department department;
 

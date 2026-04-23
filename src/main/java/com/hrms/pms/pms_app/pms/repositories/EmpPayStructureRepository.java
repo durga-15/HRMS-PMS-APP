@@ -12,4 +12,7 @@ public interface EmpPayStructureRepository extends JpaRepository<EmpPayStructure
     Optional<EmpPayStructure> findByEmpIdAndIsActiveTrue(UUID empId);
 
     List<EmpPayStructure> findByIsActiveTrue();
+
+//    List<EmpPayStructure> findByEmpIdAndIsActiveTrue(UUID empId);
+
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,6 +32,11 @@ public class EmployeeCtcController {
             @PathVariable UUID empId) {
 
         return ResponseEntity.ok(service.getActiveByEmpId(empId));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EmployeeCtcResponseDto>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
 
     @PutMapping("/{id}")

@@ -77,7 +77,8 @@ public class TaxSlabServiceImpl implements TaxSlabService {
         TaxSlab slab = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tax slab not found"));
 
-        slab.setIsActive(false);
+//        slab.setIsActive(false);
+        repository.delete(slab);
         repository.save(slab);
     }
 }
