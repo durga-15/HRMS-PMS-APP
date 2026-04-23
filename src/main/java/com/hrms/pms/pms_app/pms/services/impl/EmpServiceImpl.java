@@ -28,7 +28,7 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public EmpResponseDto addEmployee(EmpRequestDto request) {
 
-        UUID userId = SecurityUtils.getCurrentUserId();
+//        UUID userId = SecurityUtils.getCurrentUserId();
 
         Department department = departmentRepository.findById(request.getDeptId())
                 .orElseThrow(() -> new RuntimeException("Department not found"));
@@ -53,8 +53,8 @@ public class EmpServiceImpl implements EmpService {
                 .reportingManager(request.getReportingManager())
                 .noticePeriod(request.getNoticePeriod())
                 .isActive(true)
-                .createdBy(userId)
-                .updatedBy(userId)
+//                .createdBy(userId)
+//                .updatedBy(userId)
                 .build();
 
         repository.save(employee);
