@@ -47,6 +47,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/salary/pdf").permitAll()
                                 .requestMatchers("/api/users").hasAnyRole(AppConstants.ADMIN_ROLE, AppConstants.EMP_ROLE)
                                 .requestMatchers("/api/users").permitAll()
+                                .requestMatchers("/api/employees").permitAll()
                                 .requestMatchers(
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
