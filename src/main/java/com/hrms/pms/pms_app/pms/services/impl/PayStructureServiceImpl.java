@@ -166,6 +166,7 @@ public class PayStructureServiceImpl implements PayStructureService {
                 .calculationBase(entity.getCalculationBase())
                 .percentage(entity.getPercentage())
                 .fixedAmount(entity.getFixedAmount())
+                .isActive(entity.getIsActive())
                 .build();
     }
 }

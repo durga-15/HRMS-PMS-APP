@@ -19,4 +19,6 @@ public class PayStructureResponseDto {
 
     private BigDecimal percentage;
     private BigDecimal fixedAmount;
+
+    private Boolean isActive;
 }
