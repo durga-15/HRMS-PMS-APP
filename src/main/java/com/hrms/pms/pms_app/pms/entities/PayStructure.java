@@ -19,7 +19,7 @@ import java.util.UUID;
         name = "pay_structure",
         indexes = {
                 @Index(name = "idx_comp_id", columnList = "comp_id"),
-                @Index(name = "idx_employment_type_id", columnList = "employment_type_id")
+                @Index(name = "idx_employment_type_id", columnList = "emp_type_id")
         }
 )
 public class PayStructure {

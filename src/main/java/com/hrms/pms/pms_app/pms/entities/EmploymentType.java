@@ -12,12 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(
-        name = "employee_type",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uk_employment_type_name", columnNames = "name")
-        }
-)
+@Table(name = "employee_type")
 public class EmploymentType {
 
     @Id
