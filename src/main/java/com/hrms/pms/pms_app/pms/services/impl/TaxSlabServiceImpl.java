@@ -56,7 +56,7 @@ public class TaxSlabServiceImpl implements TaxSlabService {
     @Override
     public TaxSlabResponseDto getById(UUID id) {
         TaxSlab slab = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tax slab not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Tax slab not found"));
 
         return modelMapper.map(slab, TaxSlabResponseDto.class);
     }
@@ -65,7 +65,7 @@ public class TaxSlabServiceImpl implements TaxSlabService {
     public TaxSlabResponseDto update(UUID id, TaxSlabRequestDto dto) {
 
         TaxSlab slab = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tax slab not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Tax slab not found"));
 
         modelMapper.map(dto, slab);
 
@@ -75,7 +75,7 @@ public class TaxSlabServiceImpl implements TaxSlabService {
     @Override
     public void deactivate(UUID id) {
         TaxSlab slab = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tax slab not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Tax slab not found"));
 
 //        slab.setIsActive(false);
         repository.delete(slab);

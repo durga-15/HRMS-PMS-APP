@@ -28,12 +28,12 @@ public class PayrollServiceImpl implements PayrollService {
                 .existsByMonthAndYearAndIsActiveTrue(dto.getMonth(), dto.getYear());
 
         if (exists) {
-            throw new RuntimeException("Payroll already exists for this month/year");
+            throw new IllegalArgumentException("Payroll already exists for this month/year");
         }
 
         // 2. Fetch payroll cycle
         PayrollCycle cycle = payrollCycleRepository.findById(dto.getPayCycleId())
-                .orElseThrow(() -> new RuntimeException("Payroll cycle not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Payroll cycle not found"));
 
         // 3. Create payroll run
         PayRollDetails entity = PayRollDetails.builder()

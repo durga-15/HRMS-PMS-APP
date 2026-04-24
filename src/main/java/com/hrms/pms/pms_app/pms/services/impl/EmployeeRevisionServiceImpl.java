@@ -32,22 +32,22 @@ public class EmployeeRevisionServiceImpl implements EmployeeRevisionService {
                         request.getMonth(),
                         request.getYear()
                 )
-                .orElseThrow(() -> new RuntimeException("Payroll not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Payroll not found"));
 
         // 2. Get batch
         PayRollBatch batch = batchRepo
                 .findByPayRollDetails_Id(payroll.getId())
-                .orElseThrow(() -> new RuntimeException("Batch not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Batch not found"));
 
         // 3. Get employee salary
         EmployeeSalary salary = salaryRepo
                 .findByBatch_BatchIdAndEmpId(batch.getBatchId(), request.getEmpId())
-                .orElseThrow(() -> new RuntimeException("Employee salary not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Employee salary not found"));
 
         // 4. Validate revision type
         RevisionType revisionType = revisionTypeRepo
                 .findByIdAndIsActiveTrue(request.getRevisionId())
-                .orElseThrow(() -> new RuntimeException("Invalid revision type"));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid revision type"));
 
         // 5. Create revision entry (FIXED)
         EmployeeRevision revision = EmployeeRevision.builder()

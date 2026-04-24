@@ -65,19 +65,19 @@ public class PayStructureServiceImpl implements PayStructureService {
     public PayStructureResponseDto update(UUID id, PayStructureRequestDto dto) {
 
         PayStructure entity = payStructureRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pay Structure not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Pay Structure not found"));
 
         validate(dto);
 
         if (dto.getSalaryComponentId() != null) {
             SalaryComponent component = salaryComponentRepository.findById(dto.getSalaryComponentId())
-                    .orElseThrow(() -> new RuntimeException("Salary Component not found"));
+                    .orElseThrow(() -> new IllegalArgumentException("Salary Component not found"));
             entity.setSalaryComponent(component);
         }
 
         if (dto.getEmploymentTypeId() != null) {
             EmploymentType empType = employmentTypeRepository.findById(dto.getEmploymentTypeId())
-                    .orElseThrow(() -> new RuntimeException("Employment Type not found"));
+                    .orElseThrow(() -> new IllegalArgumentException("Employment Type not found"));
             entity.setEmploymentType(empType);
         }
 
@@ -127,7 +127,7 @@ public class PayStructureServiceImpl implements PayStructureService {
     public void deactivate(UUID id) {
 
         PayStructure entity = payStructureRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pay Structure not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Pay Structure not found with id: " + id));
 
         entity.setIsActive(false);
         payStructureRepository.save(entity);
@@ -137,19 +137,19 @@ public class PayStructureServiceImpl implements PayStructureService {
     private void validate(PayStructureRequestDto dto) {
 
         if (dto.getCalculationType() == null) {
-            throw new RuntimeException("Calculation type is required");
+            throw new IllegalArgumentException("Calculation type is required");
         }
 
         if (dto.getCalculationType() == CalculationType.PERCENTAGE) {
             if (dto.getPercentage() == null) {
-                throw new RuntimeException("Percentage must be provided for PERCENTAGE type");
+                throw new IllegalArgumentException("Percentage must be provided for PERCENTAGE type");
             }
             dto.setFixedAmount(null); // enforce rule
         }
 
         if (dto.getCalculationType() == CalculationType.FIXED) {
             if (dto.getFixedAmount() == null) {
-                throw new RuntimeException("Fixed amount must be provided for FIXED type");
+                throw new IllegalArgumentException("Fixed amount must be provided for FIXED type");
             }
             dto.setPercentage(null); // enforce rule
         }

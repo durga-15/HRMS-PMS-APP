@@ -24,7 +24,7 @@ public class PayrollCycleServiceImpl implements PayrollCycleService {
     public PayrollCycleResponseDto create(PayrollCycleRequestDto dto) {
 
         if (repository.existsByCycleName(dto.getCycleName())) {
-            throw new RuntimeException("Cycle name already exists");
+            throw new IllegalArgumentException("Cycle name already exists");
         }
 
         PayrollCycle entity = modelMapper.map(dto, PayrollCycle.class);
@@ -37,7 +37,7 @@ public class PayrollCycleServiceImpl implements PayrollCycleService {
     @Override
     public PayrollCycleResponseDto getById(UUID id) {
         PayrollCycle entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Payroll Cycle not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Payroll Cycle not found"));
 
         return modelMapper.map(entity, PayrollCycleResponseDto.class);
     }
@@ -54,7 +54,7 @@ public class PayrollCycleServiceImpl implements PayrollCycleService {
     public PayrollCycleResponseDto update(UUID id, PayrollCycleRequestDto dto) {
 
         PayrollCycle existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Payroll Cycle not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Payroll Cycle not found"));
 
         modelMapper.map(dto, existing);
 
@@ -66,7 +66,7 @@ public class PayrollCycleServiceImpl implements PayrollCycleService {
     @Override
     public void delete(UUID id) {
         PayrollCycle existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Payroll Cycle not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Payroll Cycle not found"));
 
         repository.delete(existing);
     }

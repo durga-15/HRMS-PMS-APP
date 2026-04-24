@@ -32,7 +32,7 @@ public class EmployeeSalaryServiceImpl implements EmployeeSalaryService {
                 repository.getEmployeeSalaryWithComponents(empId, month, year);
 
         if (data.isEmpty()) {
-            throw new RuntimeException("No salary found for given inputs");
+            throw new IllegalArgumentException("No salary found for given date!");
         }
 
         EmployeeSalaryProjection first = data.get(0);
@@ -63,7 +63,7 @@ public class EmployeeSalaryServiceImpl implements EmployeeSalaryService {
     public EmployeeSalaryResponseDto getSalaryOfEmployee(UUID empId, Long month, Long year) {
         List<EmployeeSalaryProjection> data = repository.getEmployeeSalaryWithComponents(empId, month, year);
         if (data.isEmpty()) {
-            throw new RuntimeException("No salary found for given inputs");
+            throw new IllegalArgumentException("No salary found for the Given date");
         } EmployeeSalaryProjection first = data.get(0);
         EmployeeSalaryResponseDto response = new EmployeeSalaryResponseDto();
         response.setEmpId(first.getEmpId()); response.setGrossSalary(first.getGrossSalary());

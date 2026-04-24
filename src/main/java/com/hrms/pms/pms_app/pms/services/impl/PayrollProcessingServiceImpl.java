@@ -40,10 +40,10 @@ public class PayrollProcessingServiceImpl implements PayrollProcessingService {
     public ApiResponse<String> processPayroll(UUID payRollDetailsId) {
 
         PayRollDetails payroll = payRollDetailsRepository.findById(payRollDetailsId)
-                .orElseThrow(() -> new RuntimeException("Payroll not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Payroll not found"));
 
         if ("COMPLETED".equals(payroll.getStatus())) {
-            throw new RuntimeException("Payroll already processed");
+            throw new IllegalArgumentException("Payroll already processed");
         }
 
         payroll.setStatus("PROCESSING");
@@ -103,7 +103,7 @@ public class PayrollProcessingServiceImpl implements PayrollProcessingService {
             // 1. Get CTC
             EmployeeCtc ctcEntity = employeeCtcRepository
                     .findByEmployee_EmpIdAndIsActiveTrue(emp.getEmpId())
-                    .orElseThrow(() -> new RuntimeException("CTC not found"));
+                    .orElseThrow(() -> new IllegalArgumentException("CTC not found"));
 
             BigDecimal annualCtc = ctcEntity.getCtc();
             BigDecimal monthlyCtc = divide(annualCtc, 12);
@@ -111,7 +111,7 @@ public class PayrollProcessingServiceImpl implements PayrollProcessingService {
             // 2. Get Pay Structure Mapping
             EmpPayStructure empPay = empPayStructureRepository
                     .findByEmpIdAndIsActiveTrue(emp.getEmpId())
-                    .orElseThrow(() -> new RuntimeException("Pay structure not assigned"));
+                    .orElseThrow(() -> new IllegalArgumentException("Pay structure not assigned"));
 
             List<PayStructure> components = payStructureRepository
                     .findByEmploymentTypeIdAndIsActiveTrueOrderById(
@@ -145,7 +145,7 @@ public class PayrollProcessingServiceImpl implements PayrollProcessingService {
                 if ("PERCENTAGE".equals(comp.getCalculationType().name())) {
 
                     if (baseValue == null) {
-                        throw new RuntimeException("Missing base value for " + comp.getCalculationBase());
+                        throw new IllegalArgumentException("Missing base value for " + comp.getCalculationBase());
                     }
 
                     amount = percentage(baseValue, comp.getPercentage());
@@ -215,7 +215,7 @@ public class PayrollProcessingServiceImpl implements PayrollProcessingService {
                     .findByNameIgnoreCaseAndIsActiveTrue(ComponentType.TAX.name());
 
             if (taxComponent == null) {
-                throw new RuntimeException("TAX component not configured");
+                throw new IllegalArgumentException("TAX component not configured");
             }
 
 // ✅ Add TAX as salary detail
@@ -276,7 +276,7 @@ public class PayrollProcessingServiceImpl implements PayrollProcessingService {
     public ApiResponse<String> getPayrollStatus(UUID payRollDetailsId) {
 
         PayRollDetails payroll = payRollDetailsRepository.findById(payRollDetailsId)
-                .orElseThrow(() -> new RuntimeException("Payroll not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Payroll not found"));
 
         return ApiResponse.<String>builder()
                 .message("Success")
@@ -288,10 +288,10 @@ public class PayrollProcessingServiceImpl implements PayrollProcessingService {
     public ApiResponse<String> retryPayroll(UUID payRollDetailsId) {
 
         PayRollDetails payroll = payRollDetailsRepository.findById(payRollDetailsId)
-                .orElseThrow(() -> new RuntimeException("Payroll not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Payroll not found"));
 
         if (!"FAILED".equals(payroll.getStatus())) {
-            throw new RuntimeException("Only failed payroll can be retried");
+            throw new IllegalArgumentException("Only failed payroll can be retried");
         }
 
         payroll.setStatus("INITIATED");
@@ -325,7 +325,7 @@ public class PayrollProcessingServiceImpl implements PayrollProcessingService {
                 .findByFinancialYearAndIsActiveTrueOrderByMinIncomeAsc(financialYear);
 
         if (slabs.isEmpty()) {
-            throw new RuntimeException("No tax slabs configured for FY: " + financialYear);
+            throw new IllegalArgumentException("No tax slabs configured for FY: " + financialYear);
         }
 
         BigDecimal annualIncome = monthlyGross.multiply(BigDecimal.valueOf(12));

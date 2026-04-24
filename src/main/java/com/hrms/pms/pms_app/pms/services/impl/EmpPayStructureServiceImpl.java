@@ -35,7 +35,7 @@ public class EmpPayStructureServiceImpl implements EmpPayStructureService {
                 });
 
         PayStructure payStructure = payStructureRepository.findById(dto.getPayStructureId())
-                .orElseThrow(() -> new RuntimeException("Pay structure not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Pay structure not found"));
 
         EmpPayStructure entity = EmpPayStructure.builder()
                 .empId(dto.getEmpId())
@@ -56,7 +56,7 @@ public class EmpPayStructureServiceImpl implements EmpPayStructureService {
     public ApiResponse<EmpPayStructureResponseDto> getByEmployee(UUID empId) {
 
         EmpPayStructure entity = repository.findByEmpIdAndIsActiveTrue(empId)
-                .orElseThrow(() -> new RuntimeException("No active pay structure"));
+                .orElseThrow(() -> new IllegalArgumentException("No active pay structure"));
 
         return ApiResponse.<EmpPayStructureResponseDto>builder()
                 .message("Success")
@@ -82,7 +82,7 @@ public class EmpPayStructureServiceImpl implements EmpPayStructureService {
     public ApiResponse<String> deactivate(UUID id) {
 
         EmpPayStructure entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Not found"));
 
         entity.setIsActive(false);
         repository.save(entity);

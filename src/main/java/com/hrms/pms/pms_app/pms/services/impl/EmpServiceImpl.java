@@ -31,10 +31,10 @@ public class EmpServiceImpl implements EmpService {
 //        UUID userId = SecurityUtils.getCurrentUserId();
 
         Department department = departmentRepository.findById(request.getDeptId())
-                .orElseThrow(() -> new RuntimeException("Department not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
 
         Designation designation = designationRepository.findById(request.getDesignationId())
-                .orElseThrow(() -> new RuntimeException("Designation not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Designation not found"));
 
         Employee employee = Employee.builder()
                 .firstName(request.getFirstName())
@@ -70,17 +70,17 @@ public class EmpServiceImpl implements EmpService {
         UUID userId = SecurityUtils.getCurrentUserId();
 
         Employee employee = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
 
         if (request.getDeptId() != null) {
             Department department = departmentRepository.findById(request.getDeptId())
-                    .orElseThrow(() -> new RuntimeException("Department not found"));
+                    .orElseThrow(() -> new IllegalArgumentException("Department not found"));
             employee.setDepartment(department);
         }
 
         if (request.getDesignationId() != null) {
             Designation designation = designationRepository.findById(request.getDesignationId())
-                    .orElseThrow(() -> new RuntimeException("Designation not found"));
+                    .orElseThrow(() -> new IllegalArgumentException("Designation not found"));
             employee.setDesignation(designation);
         }
 
@@ -137,7 +137,7 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public EmpResponseDto deactivateEmployee(UUID id) {
         Employee employee = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
 
         employee.setIsActive(false);
         employee.setUpdatedOn(Instant.now());
@@ -152,7 +152,7 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public Employee getEmployeeById(UUID id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
     }
 
     @Override

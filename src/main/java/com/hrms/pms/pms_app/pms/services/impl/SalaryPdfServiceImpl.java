@@ -221,7 +221,7 @@ public class SalaryPdfServiceImpl implements SalaryPdfService {
             return out.toByteArray();
 
         } catch (Exception e) {
-            throw new RuntimeException("Error while generating PDF", e);
+            throw new IllegalArgumentException("Error while generating PDF", e);
         }
     }
 }

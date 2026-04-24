@@ -24,7 +24,7 @@ public class EmploymentTypeServiceImpl implements EmploymentTypeService {
     @Transactional
     public EmploymentTypeDto createEmploymentType(EmploymentTypeDto dto) {
         repository.findByNameIgnoreCase(dto.getName())
-                .ifPresent(e -> { throw new RuntimeException("Employment Type already exists: " + dto.getName()); });
+                .ifPresent(e -> { throw new IllegalArgumentException("Employment Type already exists: " + dto.getName()); });
 
         EmploymentType entity = modelMapper.map(dto, EmploymentType.class);
         if (entity.getIsActive() == null) entity.setIsActive(true);
@@ -44,7 +44,7 @@ public class EmploymentTypeServiceImpl implements EmploymentTypeService {
     @Override
     public EmploymentTypeDto getEmploymentTypeById(UUID id) {
         EmploymentType entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employment Type not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Employment Type not found"));
         return modelMapper.map(entity, EmploymentTypeDto.class);
     }
 
@@ -52,7 +52,7 @@ public class EmploymentTypeServiceImpl implements EmploymentTypeService {
     @Transactional
     public EmploymentTypeDto updateEmploymentType(UUID id, EmploymentTypeDto dto) {
         EmploymentType existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employment Type not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Employment Type not found"));
 
         existing.setName(dto.getName());
 //        existing.setDescription(dto.getDescription());
@@ -66,7 +66,7 @@ public class EmploymentTypeServiceImpl implements EmploymentTypeService {
     @Transactional
     public void deleteEmploymentType(UUID id) {
         EmploymentType existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employment Type not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Employment Type not found"));
         repository.delete(existing);
     }
 }

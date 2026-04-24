@@ -57,7 +57,7 @@ public class DesignationService {
     public DesignationListResponseDto getDesignationByID(UUID id){
 
         Designation desig = designationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Designation not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Designation not found"));
 
         return DesignationListResponseDto.builder()
                 .id(desig.getId())
@@ -71,7 +71,7 @@ public class DesignationService {
 
     public DesignationResponseDto updateDesignation(UUID id, DesignationRequestDto request){
         Designation designation = designationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Designation not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Designation not found"));
 
         UUID userId = SecurityUtils.getCurrentUserId();
         designation.setTitle(request.getTitle());
@@ -88,10 +88,10 @@ public class DesignationService {
     public DesignationResponseDto deactivateDesignation(UUID id) {
 
         Designation designation = designationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Designation not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Designation not found"));
 
         if (!designation.getIsActive()) {
-            throw new RuntimeException("Designation already deactivated");
+            throw new IllegalArgumentException("Designation already deactivated");
         }
 
         designation.setIsActive(false);

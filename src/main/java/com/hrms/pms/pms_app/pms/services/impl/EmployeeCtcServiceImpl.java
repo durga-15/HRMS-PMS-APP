@@ -26,12 +26,12 @@ public class EmployeeCtcServiceImpl implements EmployeeCtcService {
     public EmployeeCtcResponseDto create(EmployeeCtcRequestDto dto) {
 
         Employee employee = employeeRepository.findById(dto.getEmpId())
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
 
         // 🔥 Only one active CTC allowed
         repository.findByEmployee_EmpIdAndIsActiveTrue(dto.getEmpId())
                 .ifPresent(e -> {
-                    throw new RuntimeException("Active CTC already exists");
+                    throw new IllegalArgumentException("Active CTC already exists");
                 });
 
         EmployeeCtc entity = EmployeeCtc.builder()
@@ -49,7 +49,7 @@ public class EmployeeCtcServiceImpl implements EmployeeCtcService {
     public EmployeeCtcResponseDto getActiveByEmpId(UUID empId) {
 
         EmployeeCtc entity = repository.findByEmployee_EmpIdAndIsActiveTrue(empId)
-                .orElseThrow(() -> new RuntimeException("CTC not found"));
+                .orElseThrow(() -> new IllegalArgumentException("CTC not found"));
 
         return mapToResponse(entity);
     }
@@ -58,10 +58,10 @@ public class EmployeeCtcServiceImpl implements EmployeeCtcService {
     public EmployeeCtcResponseDto update(UUID id, EmployeeCtcRequestDto dto) {
 
         EmployeeCtc entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("CTC not found"));
+                .orElseThrow(() -> new IllegalArgumentException("CTC not found"));
 
         Employee employee = employeeRepository.findById(dto.getEmpId())
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
 
         entity.setEmployee(employee);
         entity.setCtc(dto.getCtc());
@@ -83,7 +83,7 @@ public class EmployeeCtcServiceImpl implements EmployeeCtcService {
     public void deactivate(UUID id) {
 
         EmployeeCtc entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("CTC not found"));
+                .orElseThrow(() -> new IllegalArgumentException("CTC not found"));
 
         entity.setIsActive(false);
 

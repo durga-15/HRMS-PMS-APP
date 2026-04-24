@@ -60,7 +60,7 @@ public class DepartmentService {
     public DepartmentListResponseDto getDepartmentByID(UUID id){
 
         Department dept = departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Department not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
 
         return DepartmentListResponseDto.builder()
                 .id(dept.getId())
@@ -77,7 +77,7 @@ public class DepartmentService {
         UUID userId = SecurityUtils.getCurrentUserId();
 
         Department department = departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Department not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
 
         department.setDeptName(request.getDeptName());
         department.setDescription(request.getDescription());
@@ -93,7 +93,7 @@ public class DepartmentService {
     public DepartmentResponseDto deactivateDepartment(UUID id) {
 
         Department department = departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Department not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
 
         if (!department.getIsActive()) {
             throw new RuntimeException("Department already deactivated");

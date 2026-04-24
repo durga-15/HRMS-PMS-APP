@@ -35,7 +35,7 @@ public class RevisionTypeServiceImpl implements RevisionTypeService {
     public RevisionTypeResponseDto update(UUID id, RevisionTypeRequestDto dto) {
 
         RevisionType entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Revision type not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Revision type not found"));
 
         modelMapper.map(dto, entity);
         return modelMapper.map(repository.save(entity), RevisionTypeResponseDto.class);
@@ -45,7 +45,7 @@ public class RevisionTypeServiceImpl implements RevisionTypeService {
     public RevisionTypeResponseDto getById(UUID id) {
 
         RevisionType entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Revision type not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Revision type not found"));
 
         return modelMapper.map(entity, RevisionTypeResponseDto.class);
     }
@@ -62,7 +62,7 @@ public class RevisionTypeServiceImpl implements RevisionTypeService {
     public void deactivate(UUID id) {
 
         RevisionType entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Revision type not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Revision type not found"));
 
         repository.delete(entity);
     }
